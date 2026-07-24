@@ -77,7 +77,7 @@ fn cars_simulation(road_car1:char, speedup_car1: f64, road_car2:char, speedup_ca
 
         let old_position = current_pos2;
 
-        current_pos2 = current_pos2 + current_speed1 * (tickms / 1000.0) + current_speedup2 * (tickms/1000.0) * (tickms/1000.0) / 2.0;
+        current_pos2 = current_pos2 + current_speed2 * (tickms / 1000.0) + current_speedup2 * (tickms/1000.0) * (tickms/1000.0) / 2.0;
         current_speed2 = current_speed2 + current_speedup2 * (tickms/1000.0);
 
         if current_pos2 < old_position {
