@@ -10,5 +10,5 @@ fn main() {
     println!("O valor de y é: {y}");
 
     y = 6;
-    println!("O valor de y agora é: {y}");ca
+    println!("O valor de y agora é: {y}");
 }

@@ -1,0 +1,15 @@
+[workspace]
+members = [
+    "auto_crossing",
+    "basic/compound_types",
+    "basic/constants",
+    "basic/control_flow",
+    "basic/functions",
+    "basic/mutability",
+    "basic/scalar_types",
+    "basic/shadowing",
+    "examples/factorial", "examples/prime_numbers",
+    "hello_cargo",
+]
+
+resolver = "3"
