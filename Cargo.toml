@@ -8,7 +8,7 @@ members = [
     "basic/mutability",
     "basic/scalar_types",
     "basic/shadowing",
-    "examples/factorial",
+    "examples/factorial", "examples/prime_numbers",
     "hello_cargo",
 ]
 
