@@ -5,7 +5,7 @@ members = [
     "basic/constants",
     "basic/control_flow",
     "basic/functions",
-    "basic/mutability",
+    "basic/mutability", "basic/ownership",
     "basic/scalar_types",
     "basic/shadowing",
     "examples/factorial", "examples/prime_numbers",
