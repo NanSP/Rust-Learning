@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "auto_crossing",
+    "auto_crossing", "basic/borrowing",
     "basic/compound_types",
     "basic/constants",
     "basic/control_flow",
