@@ -1,13 +1,13 @@
 [workspace]
 members = [
-    "auto_crossing",
+    "auto_crossing", "basic/borrowing",
     "basic/compound_types",
     "basic/constants",
     "basic/control_flow",
-    "basic/functions",
+    "basic/functions", "basic/mut_borrowing",
     "basic/mutability", "basic/ownership",
     "basic/scalar_types",
-    "basic/shadowing",
+    "basic/shadowing", "basic/slice_type",
     "examples/factorial", "examples/prime_numbers",
     "hello_cargo",
 ]

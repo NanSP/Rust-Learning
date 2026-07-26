@@ -7,6 +7,10 @@ name = "auto_crossing"
 version = "0.1.0"
 
 [[package]]
+name = "borrowing"
+version = "0.1.0"
+
+[[package]]
 name = "compound_types"
 version = "0.1.0"
 
@@ -31,6 +35,10 @@ name = "hello_cargo"
 version = "0.1.0"
 
 [[package]]
+name = "mut_borrowing"
+version = "0.1.0"
+
+[[package]]
 name = "mutability"
 version = "0.1.0"
 
@@ -48,4 +56,8 @@ version = "0.1.0"
 
 [[package]]
 name = "shadowing"
+version = "0.1.0"
+
+[[package]]
+name = "slice_type"
 version = "0.1.0"
