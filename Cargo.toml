@@ -4,7 +4,7 @@ members = [
     "basic/compound_types",
     "basic/constants",
     "basic/control_flow",
-    "basic/functions", "basic/mut_borrowing",
+    "basic/functions", "basic/keyboard_input", "basic/mut_borrowing",
     "basic/mutability", "basic/ownership",
     "basic/scalar_types",
     "basic/shadowing", "basic/slice_type",
