@@ -7,7 +7,7 @@ members = [
     "basic/functions", "basic/keyboard_input", "basic/mut_borrowing",
     "basic/mutability", "basic/ownership",
     "basic/scalar_types",
-    "basic/shadowing", "basic/slice_type",
+    "basic/shadowing", "basic/slice_type", "basic/structs",
     "examples/factorial", "examples/prime_numbers",
     "hello_cargo",
 ]
