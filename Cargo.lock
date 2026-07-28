@@ -35,6 +35,10 @@ name = "hello_cargo"
 version = "0.1.0"
 
 [[package]]
+name = "keyboard_input"
+version = "0.1.0"
+
+[[package]]
 name = "mut_borrowing"
 version = "0.1.0"
 
@@ -60,4 +64,12 @@ version = "0.1.0"
 
 [[package]]
 name = "slice_type"
+version = "0.1.0"
+
+[[package]]
+name = "structs"
+version = "0.1.0"
+
+[[package]]
+name = "structs_part2"
 version = "0.1.0"
