@@ -3,6 +3,10 @@
 version = 4
 
 [[package]]
+name = "associated_functions"
+version = "0.1.0"
+
+[[package]]
 name = "auto_crossing"
 version = "0.1.0"
 
@@ -36,6 +40,10 @@ version = "0.1.0"
 
 [[package]]
 name = "keyboard_input"
+version = "0.1.0"
+
+[[package]]
+name = "methods"
 version = "0.1.0"
 
 [[package]]

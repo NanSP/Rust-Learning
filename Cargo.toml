@@ -1,10 +1,10 @@
 [workspace]
 members = [
-    "auto_crossing", "basic/borrowing",
+    "auto_crossing", "basic/associated_functions", "basic/borrowing",
     "basic/compound_types",
     "basic/constants",
     "basic/control_flow",
-    "basic/functions", "basic/keyboard_input", "basic/mut_borrowing",
+    "basic/functions", "basic/keyboard_input", "basic/methods", "basic/mut_borrowing",
     "basic/mutability", "basic/ownership",
     "basic/scalar_types",
     "basic/shadowing", "basic/slice_type", "basic/structs", "basic/structs_part2",
