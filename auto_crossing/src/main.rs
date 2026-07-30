@@ -13,205 +13,325 @@ const _ROADV_PERIMETER: f64 = 150.0;
 const _CAR_WIDTH: f64 = 2.0;
 const CAR_LENGTH: f64 = 4.0;
 
+const ROAD_MAX_CARS: usize = 4;
+
+const CRUISING_SPEED: f64 = 80.0 * (1000.0 / 3600.0);
 const MAX_SPEED: f64 = 200.00 * (1000.0 / 3600.0);
 const SPEEDUP_MAX: f64 = 3.0;
 const SPEEDUP_MIN: f64 = -10.0;
 
-fn cars_simulation(road_car1: char, speedup_car1: f64, road_car2: char, speedup_car2: f64) -> bool {
-    //CAR1
-    let mut plate1: String = String::from("ABC1234");
-    let road1: char = road_car1;
-    let _speedup_max1 = SPEEDUP_MAX;
-    let _speedup_min1 = SPEEDUP_MIN;
-    let max_speed1 = MAX_SPEED;
-    let length1 = CAR_LENGTH;
-    let mut current_pos1: f64 = -80.0;
-    let mut current_speed1: f64 = 0.0;
-    let current_speedup1: f64;
+struct Car {
+    plate: String,
+    road: char,
+    speedup_max: f64,
+    speedup_min: f64,
+    max_speed: f64,
+    length: f64,
+    current_pos: f64,
+    current_speed: f64,
+    current_speedup: f64,
+}
 
-    //CAR2
-    let mut plate2: String = String::from("XYZ9876");
-    let road2: char = road_car2;
-    let _speedup_max2 = SPEEDUP_MAX;
-    let _speedup_min2 = SPEEDUP_MIN;
-    let max_speed2 = MAX_SPEED;
-    let lenght2 = CAR_LENGTH;
-    let mut current_pos2: f64 = -100.0;
-    let mut current_speed2: f64 = 0.0;
-    let current_speedup2: f64;
+impl Car {
+    fn new(plate: String, road: char, speedup: f64) -> Self {
+        let (res, msg) = Car::valid_plate(&plate);
+        assert!(res, " ===INVALID PLATE: {} @{}=== ", msg, plate);
 
-    plate1 = plate1.to_uppercase();
-    plate2 = plate2.to_uppercase();
+        assert!(
+            speedup >= SPEEDUP_MIN && speedup <= SPEEDUP_MAX,
+            " ===INVALID SPEED UP: {} @{}=== ",
+            plate,
+            speedup
+        );
 
-    if !verify_plate(&plate1) {
-        panic!("==INVALID PLATE: {} ==", plate1);
+        Self {
+            plate,
+            road,
+            speedup_max: SPEEDUP_MAX,
+            speedup_min: SPEEDUP_MIN,
+            max_speed: MAX_SPEED,
+            length: CAR_LENGTH,
+            current_pos: if road == 'H' {
+                -_ROADH_PERIMETER
+            } else {
+                -_ROADV_PERIMETER
+            },
+            current_speed: CRUISING_SPEED,
+            current_speedup: speedup,
+        }
     }
 
-    if !verify_plate(&plate2) {
-        panic!("==INVALID PLATE: {} ==", plate2);
+    fn valid_plate(plate: &str) -> (bool, &str) {
+        if !plate.is_ascii() {
+            return (false, "----The plate is not ASCII----");
+        }
+
+        if plate.len() != 7 {
+            return (false, "----The don't have the correct length----");
+        }
+
+        let begin = &plate[0..3];
+        for x in begin.chars() {
+            if !x.is_alphabetic() {
+                return (false, "----The plate has no letters on begin----");
+            }
+        }
+
+        let end = &plate[3..];
+        for x in end.chars() {
+            if !x.is_ascii_digit() {
+                return (false, "----The plate has no digits in the end----");
+            }
+        }
+        (true, "")
     }
 
-    current_speedup1 = speedup_car1;
-    current_speedup2 = speedup_car2;
+    fn show(&self) {
+        println!(
+            "@{} in the position {}{}, speed {}, speedup {}",
+            self.plate, self.road, self.current_pos, self.current_speed, self.current_speedup
+        )
+    }
 
-    println!("==SIMULATION START==");
+    fn tick(&mut self, tickms: f64) {
+        let prev_pos = self.current_pos;
+
+        self.current_pos = self.current_pos
+            + self.current_speed * (tickms / 1000.0)
+            + self.current_speedup * (tickms / 1000.0) / 2.0;
+
+        self.current_speed = self.current_speed + self.current_speedup * (tickms / 1000.0);
+
+        if self.current_pos < prev_pos {
+            self.current_pos = prev_pos;
+        }
+
+        if self.current_speed < 0.0 {
+            self.current_speed = 0.0;
+        }
+
+        if self.current_speed > self.max_speed {
+            self.current_speed = self.max_speed;
+        }
+    }
+}
+
+struct Traffic {
+    num_created_cars_h: usize,
+    num_leave_cars_h: usize,
+    cars_road_h: [Car; 4],
+    num_created_cars_v: usize,
+    num_leave_cars_v: usize,
+    cars_road_v: [Car; 4],
+}
+
+impl Traffic {
+    fn new() -> Self {
+        Self {
+            num_created_cars_h: 0,
+            num_leave_cars_h: 0,
+            cars_road_h: [
+                Car::new(String::from("AAA0000"), 'H', 0.0),
+                Car::new(String::from("BBB0000"), 'H', 0.0),
+                Car::new(String::from("CCC0000"), 'H', 0.0),
+                Car::new(String::from("DDD0000"), 'H', 0.0),
+            ],
+            num_created_cars_v: 0,
+            num_leave_cars_v: 0,
+            cars_road_v: [
+                Car::new(String::from("AAA1111"), 'V', 0.0),
+                Car::new(String::from("BBB2222"), 'V', 0.0),
+                Car::new(String::from("CCC3333"), 'V', 0.0),
+                Car::new(String::from("DDD4444"), 'V', 0.0),
+            ],
+        }
+    }
+
+    fn collision_detect(&self) -> (bool, &str) {
+        let mut i: usize = self.num_leave_cars_h + 1;
+        while i < self.num_created_cars_h {
+            if self.cars_road_h[i - 1].current_pos - self.cars_road_h[i - 1].length
+                <= self.cars_road_h[i].current_pos
+            {
+                return (true, "===Collision on road H, cars {}===");
+            }
+            i += 1;
+        }
+
+        i = self.num_leave_cars_v + 1;
+        while i < self.num_created_cars_v {
+            if self.cars_road_v[i - 1].current_pos - self.cars_road_v[i - 1].length
+                <= self.cars_road_v[i].current_pos
+            {
+                return (true, "===Collision on road V, cars {}===");
+            }
+            i += 1;
+        }
+
+        let mut crossing_h = false;
+        let mut crossing_v = false;
+        i = self.num_leave_cars_h;
+        while i < self.num_created_cars_h {
+            crossing_h = crossing_h
+                || (self.cars_road_h[i].current_pos > 0.0
+                    && self.cars_road_h[i].current_pos
+                        < 0.0 + ROADV_WIDTH + self.cars_road_h[i].length);
+
+            i += 1;
+        }
+
+        i = self.num_leave_cars_v;
+        while i < self.num_created_cars_v {
+            crossing_v = crossing_v
+                || (self.cars_road_v[i].current_pos > 0.0
+                    && self.cars_road_v[i].current_pos
+                        < 0.0 + ROADH_WIDTH + self.cars_road_v[i].length);
+
+            i += 1;
+        }
+        if crossing_h && crossing_v {
+            return (true, "===CROSSING COLLISION===");
+        }
+        (false, "")
+    }
+
+    fn arrive_car(&mut self, road: char, speedup: f64) -> bool {
+        assert!(
+            road == 'H' || road == 'V',
+            " ARRIVE_CAR RECEIVES ROAD {}",
+            road
+        );
+
+        let already_has = if road == 'H' {
+            self.num_created_cars_h
+        } else {
+            self.num_created_cars_v
+        };
+        if already_has == ROAD_MAX_CARS {
+            return false;
+        }
+
+        let mut new_plate = String::from("EEE");
+        new_plate.push_str(&format!("{:04}", already_has));
+
+        let new_car = Car::new(new_plate, road, speedup);
+
+        if road == 'H' {
+            self.cars_road_h[self.num_created_cars_h] = new_car;
+            self.num_created_cars_h += 1;
+        } else {
+            self.cars_road_v[self.num_created_cars_v] = new_car;
+            self.num_created_cars_v += 1;
+        }
+
+        true
+    }
+
+    fn tick(&mut self, tickms: f64) {
+        print!("-TRAFFTIC.TICK-");
+
+        let mut i;
+
+        i = self.num_leave_cars_h;
+        while i < self.num_created_cars_h {
+            self.cars_road_h[i].tick(tickms);
+            i += 1;
+        }
+
+        i = self.num_leave_cars_v;
+        while i < self.num_created_cars_v {
+            self.cars_road_v[i].tick(tickms);
+            i += 1;
+        }
+
+        if self.num_leave_cars_h < self.num_created_cars_h {
+            let older_h = &self.cars_road_h[self.num_leave_cars_h];
+            if older_h.current_pos > older_h.length + ROADV_WIDTH + _ROADH_MARGIN {
+                println!("=== @{} LEAVE THE ROAD H===", older_h.plate);
+                self.num_leave_cars_h += 1;
+            }
+        }
+
+        if self.num_leave_cars_v < self.num_created_cars_v {
+            let older_v = &self.cars_road_v[self.num_leave_cars_v];
+            if older_v.current_pos > older_v.length + ROADH_WIDTH + _ROADV_MARGIN {
+                println!("=== @{} LEAVE THE ROAD H===", older_v.plate);
+                self.num_leave_cars_v += 1;
+            }
+        }
+    }
+
+    fn show_roads(&self) {
+        println!("-----CARS ON ROAD H-----");
+
+        let mut i = self.num_leave_cars_h;
+        while i < self.num_created_cars_h {
+            self.cars_road_h[i].show();
+            i += 1;
+        }
+
+        println!("-----CARS ON ROAD V-----");
+
+        let mut i = self.num_leave_cars_v;
+        while i < self.num_created_cars_v {
+            self.cars_road_v[i].show();
+            i += 1;
+        }
+    }
+}
+
+fn cars_simulation() {
+    const TIME_BETWEEN_ARRIVALS: f64 = 3000.0;
+
+    let mut traffic = Traffic::new();
+
+    traffic.arrive_car('H', SPEEDUP_MAX);
+
+    traffic.arrive_car('V', SPEEDUP_MAX);
+
+    let mut time_until_next_arrival = TIME_BETWEEN_ARRIVALS;
+
+    println!("____CARS SIMULATION____");
     let mut tickms: f64;
 
     loop {
-        sleep(Duration::from_millis(100));
-
         tickms = 100.0;
 
-        //UPDATE CAR1
+        sleep(Duration::from_millis(tickms.round() as u64));
+        traffic.tick(tickms);
 
-        let old_position = current_pos1;
+        traffic.show_roads();
 
-        current_pos1 = current_pos1
-            + current_speed1 * (tickms / 1000.0)
-            + current_speedup1 * (tickms / 1000.0) * (tickms / 1000.0) / 2.0;
-        current_speed1 = current_speed1 + current_speedup1 * (tickms / 1000.0);
-
-        if current_pos1 < old_position {
-            current_pos1 = old_position;
+        let (happen, msg) = traffic.collision_detect();
+        if happen {
+            panic!("----==COLLISION DETECTED: {}==----", msg);
         }
 
-        if current_speed1 < 0.0 {
-            current_speed1 = 0.0;
-        }
-
-        if current_speed1 > max_speed1 {
-            current_speed1 = max_speed1;
-        }
-
-        println!(
-            "CAR1 {} in the position {}{}, speed: {}, speed up {}",
-            plate1, road1, current_pos1, current_speed1, current_speedup1
-        );
-
-        //UPDATE CAR2
-
-        let old_position = current_pos2;
-
-        current_pos2 = current_pos2
-            + current_speed2 * (tickms / 1000.0)
-            + current_speedup2 * (tickms / 1000.0) * (tickms / 1000.0) / 2.0;
-        current_speed2 = current_speed2 + current_speedup2 * (tickms / 1000.0);
-
-        if current_pos2 < old_position {
-            current_pos2 = old_position;
-        }
-
-        if current_speed2 < 0.0 {
-            current_speed2 = 0.0;
-        }
-
-        if current_speed2 > max_speed2 {
-            current_speed2 = max_speed2;
-        }
-
-        println!(
-            "CAR2 {} in the position {}{}, speed: {}, speed up {}",
-            plate2, road2, current_pos2, current_speed2, current_speedup2
-        );
-
-        //COLLISION DETECT
-
-        if road1 == 'H' && road2 == 'H' {
-            if collision_long(current_pos1, length1, current_pos2) {
-                println!("Collision on road H");
-                return true;
-            }
-        }
-
-        if road1 == 'V' && road2 == 'V' {
-            if collision_long(current_pos1, length1, current_pos2) {
-                println!("Collision on road V");
-                return true;
-            }
-        }
-
-        if road1 != road2 {
-            if inside_crossing(current_pos1, length1, road1)
-                && inside_crossing(current_pos2, lenght2, road2)
-            {
-                println!("Collision inside crossing");
-                return true;
-            }
-        }
-
-        if current_pos1
-            > length1
-                + if road1 == 'H' {
-                    ROADV_WIDTH
-                } else {
-                    ROADH_WIDTH
-                }
+        if traffic.num_created_cars_h == traffic.num_leave_cars_h
+            && traffic.num_created_cars_v == traffic.num_leave_cars_v
         {
             break;
         }
 
-        if current_pos2
-            > lenght2
-                + if road2 == 'V' {
-                    ROADV_WIDTH
-                } else {
-                    ROADH_WIDTH
-                }
-        {
-            break;
+        time_until_next_arrival -= tickms;
+
+        if time_until_next_arrival <= 0.0 {
+            let speedup: f64 = 0.0;
+            assert!(
+                traffic.arrive_car('H', SPEEDUP_MAX),
+                "FAIL TO ARRIVE A CAR ON ROAD H"
+            );
+            assert!(
+                traffic.arrive_car('V', SPEEDUP_MAX),
+                "FAIL TO ARRIVE A CAR ON ROAD V"
+            );
+            time_until_next_arrival += TIME_BETWEEN_ARRIVALS;
         }
     }
-
-    return false;
-}
-
-fn collision_long(front_pos: f64, lenght: f64, back_pos: f64) -> bool {
-    return front_pos - lenght <= back_pos;
-}
-
-fn inside_crossing(position: f64, lenght: f64, road: char) -> bool {
-    return position > 0.0
-        && position
-            <= lenght
-                + if road == 'H' {
-                    ROADV_WIDTH
-                } else {
-                    ROADV_WIDTH
-                };
-}
-
-fn verify_plate(plate: &str) -> bool {
-    if !plate.is_ascii() {
-        println!("==Plate is not ASCII==");
-        return false;
-    }
-
-    if plate.len() != 7 {
-        println!("Plate don't hava the correct length");
-        return false;
-    }
-
-    let begin = &plate[0..3];
-    let end = &plate[3..];
-
-    for x in begin.chars() {
-        if !x.is_alphabetic() {
-            println!("The plate has no letters on begin");
-            return false;
-        }
-    }
-
-    for x in end.chars() {
-        if !x.is_ascii_digit() {
-            println!("The plate has no digits in the end");
-            return false;
-        }
-    }
-    true
 }
 
 fn main() {
     println!("===BEGIN===");
-    cars_simulation('H', SPEEDUP_MAX / 10.0, 'H', SPEEDUP_MAX);
+    cars_simulation();
     println!("===END===");
 }

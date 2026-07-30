@@ -63,6 +63,10 @@ name = "prime_numbers"
 version = "0.1.0"
 
 [[package]]
+name = "prime_numbers_v2"
+version = "0.1.0"
+
+[[package]]
 name = "scalar_types"
 version = "0.1.0"
 
