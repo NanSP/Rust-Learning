@@ -111,7 +111,7 @@ impl Car {
         }
 
         if self.current_speed > self.max_speed {
-            self.max_speed = self.max_speed;
+            self.current_speed = self.max_speed;
         }
     }
 }
