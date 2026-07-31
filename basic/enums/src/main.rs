@@ -63,9 +63,25 @@ fn example_with_enum2() {
     println!("home {:?}  loopback {:?}", home, loopback);
 }
 
+#[derive(Debug)]
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+impl Message {
+    fn call(&self) {
+        println!("\nCall message is: {:?}", &self);
+    }
+}
 fn main() {
     simple_example_enum();
     example_with_struct();
     example_with_enum();
     example_with_enum2();
+
+    let m = Message::Write(String::from("The test"));
+    m.call();
 }
