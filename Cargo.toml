@@ -3,7 +3,7 @@ members = [
     "auto_crossing", "basic/associated_functions", "basic/borrowing",
     "basic/compound_types",
     "basic/constants",
-    "basic/control_flow", "basic/enums",
+    "basic/control_flow", "basic/enums", "basic/exhausted_match",
     "basic/functions", "basic/keyboard_input", "basic/matchs", "basic/methods", "basic/mut_borrowing",
     "basic/mutability", "basic/ownership",
     "basic/scalar_types",
