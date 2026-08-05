@@ -20,9 +20,15 @@ const MAX_SPEED: f64 = 200.00 * (1000.0 / 3600.0);
 const SPEEDUP_MAX: f64 = 3.0;
 const SPEEDUP_MIN: f64 = -10.0;
 
+#[derive(Debug, Clone)]
+enum Road {
+    RoadH,
+    RoadV,
+}
+
 struct Car {
     plate: String,
-    road: char,
+    road: Road,
     speedup_max: f64,
     speedup_min: f64,
     max_speed: f64,
@@ -33,7 +39,7 @@ struct Car {
 }
 
 impl Car {
-    fn new(plate: String, road: char, speedup: f64) -> Self {
+    fn new(plate: String, road: Road, speedup: f64) -> Self {
         let (res, msg) = Car::valid_plate(&plate);
         assert!(res, " ===INVALID PLATE: {} @{}=== ", msg, plate);
 
@@ -46,15 +52,14 @@ impl Car {
 
         Self {
             plate,
-            road,
+            road: road.clone(),
             speedup_max: SPEEDUP_MAX,
             speedup_min: SPEEDUP_MIN,
             max_speed: MAX_SPEED,
             length: CAR_LENGTH,
-            current_pos: if road == 'H' {
-                -_ROADH_PERIMETER
-            } else {
-                -_ROADV_PERIMETER
+            current_pos: match road {
+                Road::RoadH => -_ROADH_PERIMETER,
+                Road::RoadV => -_ROADV_PERIMETER,
             },
             current_speed: CRUISING_SPEED,
             current_speedup: speedup,
@@ -88,7 +93,7 @@ impl Car {
 
     fn show(&self) {
         println!(
-            "@{} in the position {}{}, speed {}, speedup {}",
+            "@{} in the position {:?}{}, speed {}, speedup {}",
             self.plate, self.road, self.current_pos, self.current_speed, self.current_speedup
         )
     }
@@ -131,29 +136,29 @@ impl Traffic {
             num_created_cars_h: 0,
             num_leave_cars_h: 0,
             cars_road_h: [
-                Car::new(String::from("AAA0000"), 'H', 0.0),
-                Car::new(String::from("BBB0000"), 'H', 0.0),
-                Car::new(String::from("CCC0000"), 'H', 0.0),
-                Car::new(String::from("DDD0000"), 'H', 0.0),
+                Car::new(String::from("AAA0000"), Road::RoadH, 0.0),
+                Car::new(String::from("BBB0000"), Road::RoadH, 0.0),
+                Car::new(String::from("CCC0000"), Road::RoadH, 0.0),
+                Car::new(String::from("DDD0000"), Road::RoadH, 0.0),
             ],
             num_created_cars_v: 0,
             num_leave_cars_v: 0,
             cars_road_v: [
-                Car::new(String::from("AAA1111"), 'V', 0.0),
-                Car::new(String::from("BBB2222"), 'V', 0.0),
-                Car::new(String::from("CCC3333"), 'V', 0.0),
-                Car::new(String::from("DDD4444"), 'V', 0.0),
+                Car::new(String::from("AAA1111"), Road::RoadV, 0.0),
+                Car::new(String::from("BBB2222"), Road::RoadV, 0.0),
+                Car::new(String::from("CCC3333"), Road::RoadV, 0.0),
+                Car::new(String::from("DDD4444"), Road::RoadV, 0.0),
             ],
         }
     }
 
-    fn collision_detect(&self) -> (bool, &str) {
+    fn collision_detect(&self) -> Option<&str> {
         let mut i: usize = self.num_leave_cars_h + 1;
         while i < self.num_created_cars_h {
             if self.cars_road_h[i - 1].current_pos - self.cars_road_h[i - 1].length
                 <= self.cars_road_h[i].current_pos
             {
-                return (true, "===Collision on road H, cars {}===");
+                return Some("===Collision on road H, cars {}===");
             }
             i += 1;
         }
@@ -163,7 +168,7 @@ impl Traffic {
             if self.cars_road_v[i - 1].current_pos - self.cars_road_v[i - 1].length
                 <= self.cars_road_v[i].current_pos
             {
-                return (true, "===Collision on road V, cars {}===");
+                return Some("===Collision on road V, cars {}===");
             }
             i += 1;
         }
@@ -190,23 +195,17 @@ impl Traffic {
             i += 1;
         }
         if crossing_h && crossing_v {
-            return (true, "===CROSSING COLLISION===");
+            return Some("===CROSSING COLLISION===");
         }
-        (false, "")
+        None
     }
 
-    fn arrive_car(&mut self, road: char, speedup: f64) -> bool {
-        assert!(
-            road == 'H' || road == 'V',
-            " ARRIVE_CAR RECEIVES ROAD {}",
-            road
-        );
-
-        let already_has = if road == 'H' {
-            self.num_created_cars_h
-        } else {
-            self.num_created_cars_v
+    fn arrive_car(&mut self, road: Road, speedup: f64) -> bool {
+        let already_has = match road {
+            Road::RoadH => self.num_created_cars_h,
+            Road::RoadV => self.num_created_cars_v,
         };
+
         if already_has == ROAD_MAX_CARS {
             return false;
         }
@@ -214,14 +213,17 @@ impl Traffic {
         let mut new_plate = String::from("EEE");
         new_plate.push_str(&format!("{:04}", already_has));
 
-        let new_car = Car::new(new_plate, road, speedup);
+        let new_car = Car::new(new_plate, road.clone(), speedup);
 
-        if road == 'H' {
-            self.cars_road_h[self.num_created_cars_h] = new_car;
-            self.num_created_cars_h += 1;
-        } else {
-            self.cars_road_v[self.num_created_cars_v] = new_car;
-            self.num_created_cars_v += 1;
+        match road {
+            Road::RoadH => {
+                self.cars_road_h[self.num_created_cars_h] = new_car;
+                self.num_created_cars_h += 1;
+            }
+            Road::RoadV => {
+                self.cars_road_v[self.num_created_cars_v] = new_car;
+                self.num_created_cars_v += 1;
+            }
         }
 
         true
@@ -255,7 +257,7 @@ impl Traffic {
         if self.num_leave_cars_v < self.num_created_cars_v {
             let older_v = &self.cars_road_v[self.num_leave_cars_v];
             if older_v.current_pos > older_v.length + ROADH_WIDTH + _ROADV_MARGIN {
-                println!("=== @{} LEAVE THE ROAD H===", older_v.plate);
+                println!("=== @{} LEAVE THE ROAD V===", older_v.plate);
                 self.num_leave_cars_v += 1;
             }
         }
@@ -285,9 +287,9 @@ fn cars_simulation() {
 
     let mut traffic = Traffic::new();
 
-    traffic.arrive_car('H', SPEEDUP_MAX);
+    traffic.arrive_car(Road::RoadH, SPEEDUP_MAX);
 
-    traffic.arrive_car('V', SPEEDUP_MAX);
+    traffic.arrive_car(Road::RoadV, SPEEDUP_MAX);
 
     let mut time_until_next_arrival = TIME_BETWEEN_ARRIVALS;
 
@@ -302,9 +304,9 @@ fn cars_simulation() {
 
         traffic.show_roads();
 
-        let (happen, msg) = traffic.collision_detect();
-        if happen {
-            panic!("----==COLLISION DETECTED: {}==----", msg);
+        match traffic.collision_detect() {
+            Some(m) => panic!("Collision detected: {}", m),
+            None => {}
         }
 
         if traffic.num_created_cars_h == traffic.num_leave_cars_h
@@ -318,11 +320,11 @@ fn cars_simulation() {
         if time_until_next_arrival <= 0.0 {
             let speedup: f64 = 0.0;
             assert!(
-                traffic.arrive_car('H', SPEEDUP_MAX),
+                traffic.arrive_car(Road::RoadH, SPEEDUP_MAX),
                 "FAIL TO ARRIVE A CAR ON ROAD H"
             );
             assert!(
-                traffic.arrive_car('V', SPEEDUP_MAX),
+                traffic.arrive_car(Road::RoadV, SPEEDUP_MAX),
                 "FAIL TO ARRIVE A CAR ON ROAD V"
             );
             time_until_next_arrival += TIME_BETWEEN_ARRIVALS;
