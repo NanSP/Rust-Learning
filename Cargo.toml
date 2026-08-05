@@ -5,7 +5,7 @@ members = [
     "basic/constants",
     "basic/control_flow", "basic/enums", "basic/exhausted_match",
     "basic/functions", "basic/keyboard_input", "basic/matchs", "basic/methods", "basic/mut_borrowing",
-    "basic/mutability", "basic/ownership",
+    "basic/mutability", "basic/options", "basic/ownership",
     "basic/scalar_types",
     "basic/shadowing", "basic/slice_type", "basic/structs", "basic/structs_part2",
     "examples/factorial", "examples/prime_numbers", "examples/prime_numbers_v2",
