@@ -1,12 +1,58 @@
-   0.031022800s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\packages_creates_modules\\src\\front_of_house\\serving.rs"
-   0.031057000s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\packages_creates_modules-b82084aac4acb346\\dep-bin-packages_creates_modules"
-   0.031065200s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13430524643, nanos: 825346300 } < FileTime { seconds: 13430525044, nanos: 769500000 }
-   0.031215700s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint: fingerprint dirty for packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules)/Check { test: false }/TargetInner { name: "packages_creates_modules", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\packages_creates_modules\\src\\main.rs", Edition2024) }
-   0.031242500s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\packages_creates_modules-b82084aac4acb346\\dep-bin-packages_creates_modules", reference_mtime: FileTime { seconds: 13430524643, nanos: 825346300 }, stale: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\packages_creates_modules\\src\\front_of_house\\serving.rs", stale_mtime: FileTime { seconds: 13430525044, nanos: 769500000 } }))
-   0.032000900s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\packages_creates_modules\\src\\front_of_house\\serving.rs"
-   0.032019400s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\packages_creates_modules-3c6f0c5d33b9bfba\\dep-test-bin-packages_creates_modules"
-   0.032025300s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13430524643, nanos: 825346300 } < FileTime { seconds: 13430525044, nanos: 769500000 }
-   0.032152700s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint: fingerprint dirty for packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules)/Check { test: true }/TargetInner { name: "packages_creates_modules", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\packages_creates_modules\\src\\main.rs", Edition2024) }
-   0.032172700s  INFO prepare_target{force=false package_id=packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules) target="packages_creates_modules"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\packages_creates_modules-3c6f0c5d33b9bfba\\dep-test-bin-packages_creates_modules", reference_mtime: FileTime { seconds: 13430524643, nanos: 825346300 }, stale: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\packages_creates_modules\\src\\front_of_house\\serving.rs", stale_mtime: FileTime { seconds: 13430525044, nanos: 769500000 } }))
-    Checking packages_creates_modules v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\packages_creates_modules)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+   0.053761400s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint: fingerprint error for paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths)/Check { test: false }/TargetInner { name: "paths", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\paths\\src\\main.rs", Edition2024) }
+   0.053806600s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\hpere\Desktop\Dev\Rust-Learning\target\debug\.fingerprint\paths-b82a481049c3ac2f\bin-paths`
+
+Caused by:
+    O sistema não pode encontrar o arquivo especificado. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.065641600s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint: fingerprint error for paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths)/Check { test: true }/TargetInner { name: "paths", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\paths\\src\\main.rs", Edition2024) }
+   0.065671500s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\hpere\Desktop\Dev\Rust-Learning\target\debug\.fingerprint\paths-815ed79f56f61dcc\test-bin-paths`
+
+Caused by:
+    O sistema não pode encontrar o arquivo especificado. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+    Checking paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s
