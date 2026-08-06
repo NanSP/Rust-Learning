@@ -1,58 +1,12 @@
-   0.053761400s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint: fingerprint error for paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths)/Check { test: false }/TargetInner { name: "paths", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\paths\\src\\main.rs", Edition2024) }
-   0.053806600s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\hpere\Desktop\Dev\Rust-Learning\target\debug\.fingerprint\paths-b82a481049c3ac2f\bin-paths`
-
-Caused by:
-    O sistema não pode encontrar o arquivo especificado. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_libgit2_prerelease
-  12: <unknown>
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-   0.065641600s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint: fingerprint error for paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths)/Check { test: true }/TargetInner { name: "paths", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\basic\\paths\\src\\main.rs", Edition2024) }
-   0.065671500s  INFO prepare_target{force=false package_id=paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths) target="paths"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\hpere\Desktop\Dev\Rust-Learning\target\debug\.fingerprint\paths-815ed79f56f61dcc\test-bin-paths`
-
-Caused by:
-    O sistema não pode encontrar o arquivo especificado. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_libgit2_prerelease
-  12: <unknown>
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-    Checking paths v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\basic\paths)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s
+   0.037027700s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\auto_crossing\\src\\main.rs"
+   0.037058900s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\auto_crossing-ebf4795f6848efa1\\dep-bin-auto_crossing"
+   0.037066300s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13430531990, nanos: 438572500 } < FileTime { seconds: 13430532052, nanos: 967535700 }
+   0.037261200s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint: fingerprint dirty for auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing)/Check { test: false }/TargetInner { name: "auto_crossing", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\auto_crossing\\src\\main.rs", Edition2024) }
+   0.037285900s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\auto_crossing-ebf4795f6848efa1\\dep-bin-auto_crossing", reference_mtime: FileTime { seconds: 13430531990, nanos: 438572500 }, stale: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\auto_crossing\\src\\main.rs", stale_mtime: FileTime { seconds: 13430532052, nanos: 967535700 } }))
+   0.038594200s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\auto_crossing\\src\\main.rs"
+   0.038622500s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\auto_crossing-62de76c78cccad0f\\dep-test-bin-auto_crossing"
+   0.038633900s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13430531990, nanos: 438572500 } < FileTime { seconds: 13430532052, nanos: 967535700 }
+   0.038861700s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint: fingerprint dirty for auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing)/Check { test: true }/TargetInner { name: "auto_crossing", doc: true, ..: with_path("C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\auto_crossing\\src\\main.rs", Edition2024) }
+   0.038893800s  INFO prepare_target{force=false package_id=auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing) target="auto_crossing"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\target\\debug\\.fingerprint\\auto_crossing-62de76c78cccad0f\\dep-test-bin-auto_crossing", reference_mtime: FileTime { seconds: 13430531990, nanos: 438572500 }, stale: "C:\\Users\\hpere\\Desktop\\Dev\\Rust-Learning\\auto_crossing\\src\\main.rs", stale_mtime: FileTime { seconds: 13430532052, nanos: 967535700 } }))
+    Checking auto_crossing v0.1.0 (C:\Users\hpere\Desktop\Dev\Rust-Learning\auto_crossing)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s
