@@ -1,0 +1,24 @@
+# Rust build artifacts
+/target/
+**/target/
+
+# Cargo and rustc temporary files
+*.rs.bk
+.rustc_info.json
+
+# rust-analyzer / Flycheck
+**/flycheck*/
+
+# Windows build/debug artifacts common in local Rust workflows
+*.pdb
+*.ilk
+hello_word/*.exe
+hello_word/*.pdb
+
+# IDE/editor settings
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
