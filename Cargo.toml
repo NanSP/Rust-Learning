@@ -7,7 +7,7 @@ members = [
     "basic/functions", "basic/if_let", "basic/keyboard_input", "basic/matchs", "basic/methods", "basic/mut_borrowing",
     "basic/mutability", "basic/options", "basic/ownership", "basic/packages_creates_modules", "basic/paths",
     "basic/scalar_types",
-    "basic/shadowing", "basic/slice_type", "basic/structs", "basic/structs_part2", "basic/vectors",
+    "basic/shadowing", "basic/slice_type", "basic/strings", "basic/structs", "basic/structs_part2", "basic/vectors",
     "examples/factorial", "examples/prime_numbers", "examples/prime_numbers_v2",
     "hello_cargo",
 ]
