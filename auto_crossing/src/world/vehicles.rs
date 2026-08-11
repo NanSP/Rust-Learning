@@ -1,7 +1,7 @@
 const _CAR_WIDTH: f64 = 2.0;
 const CAR_LENGTH: f64 = 4.0;
 
-const CRUISING_SPEED: f64 = 80.0 * (1000.0 / 3600.0);
+pub const CRUISING_SPEED: f64 = 80.0 * (1000.0 / 3600.0);
 pub const MAX_SPEED: f64 = 200.00 * (1000.0 / 3600.0);
 pub const SPEEDUP_MAX: f64 = 3.0;
 pub const SPEEDUP_MIN: f64 = -10.0;
@@ -16,7 +16,7 @@ pub struct Car {
     max_speed: f64,
     pub length: f64,
     pub current_pos: f64,
-    current_speed: f64,
+    pub current_speed: f64,
     current_speedup: f64,
 }
 
