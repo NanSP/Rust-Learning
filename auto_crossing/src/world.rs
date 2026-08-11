@@ -20,143 +20,146 @@ pub enum Road {
 }
 
 pub struct Traffic {
-    num_created_cars_h: usize,
-    num_leave_cars_h: usize,
-    cars_road_h: [Car; 4],
-    num_created_cars_v: usize,
-    num_leave_cars_v: usize,
-    cars_road_v: [Car; 4],
+    cars_road_h: Vec<Car>,
+    cars_road_v: Vec<Car>,
+    created_cars: i32,
 }
 
 impl Traffic {
     pub fn new() -> Self {
         Self {
-            num_created_cars_h: 0,
-            num_leave_cars_h: 0,
-            cars_road_h: [
-                Car::new(String::from("AAA0000"), Road::RoadH, 0.0),
-                Car::new(String::from("BBB0000"), Road::RoadH, 0.0),
-                Car::new(String::from("CCC0000"), Road::RoadH, 0.0),
-                Car::new(String::from("DDD0000"), Road::RoadH, 0.0),
-            ],
-            num_created_cars_v: 0,
-            num_leave_cars_v: 0,
-            cars_road_v: [
-                Car::new(String::from("AAA1111"), Road::RoadV, 0.0),
-                Car::new(String::from("BBB2222"), Road::RoadV, 0.0),
-                Car::new(String::from("CCC3333"), Road::RoadV, 0.0),
-                Car::new(String::from("DDD4444"), Road::RoadV, 0.0),
-            ],
+            cars_road_h: Vec::new(),
+            cars_road_v: Vec::new(),
+            created_cars: 0,
         }
     }
 
     pub fn collision_detect(&self) -> Option<&str> {
-        let mut i: usize = self.num_leave_cars_h + 1;
-        while i < self.num_created_cars_h {
-            if self.cars_road_h[i - 1].current_pos - self.cars_road_h[i - 1].length
-                <= self.cars_road_h[i].current_pos
-            {
-                return Some("===Collision on road H, cars {}===");
+        if self.cars_road_h.len() >= 2 {
+            for i in 0..self.cars_road_h.len() - 1 {
+                let back_i = self.cars_road_h.get(i).unwrap().current_pos
+                    - self.cars_road_h.get(i).unwrap().length;
+                if back_i <= self.cars_road_h.get(i + 1).unwrap().current_pos {
+                    return Some("Collision on ROAD H");
+                }
             }
-            i += 1;
         }
 
-        i = self.num_leave_cars_v + 1;
-        while i < self.num_created_cars_v {
-            if self.cars_road_v[i - 1].current_pos - self.cars_road_v[i - 1].length
-                <= self.cars_road_v[i].current_pos
-            {
-                return Some("===Collision on road V, cars {}===");
+        if self.cars_road_h.len() >= 2 {
+            for i in 0..self.cars_road_v.len() - 1 {
+                let back_i = self.cars_road_v.get(i).unwrap().current_pos
+                    - self.cars_road_v.get(i).unwrap().length;
+                if back_i <= self.cars_road_v.get(i + 1).unwrap().current_pos {
+                    return Some("Collision on ROAD V");
+                }
             }
-            i += 1;
         }
 
         let mut crossing_h = false;
         let mut crossing_v = false;
-        i = self.num_leave_cars_h;
-        while i < self.num_created_cars_h {
+
+        for car in &self.cars_road_h {
             crossing_h = crossing_h
-                || (self.cars_road_h[i].current_pos > 0.0
-                    && self.cars_road_h[i].current_pos
-                        < 0.0 + ROADV_WIDTH + self.cars_road_h[i].length);
-
-            i += 1;
+                || (car.current_pos > 0.0 && car.current_pos < 0.0 + ROADV_WIDTH + car.length)
         }
 
-        i = self.num_leave_cars_v;
-        while i < self.num_created_cars_v {
+        for car in &self.cars_road_v {
             crossing_v = crossing_v
-                || (self.cars_road_v[i].current_pos > 0.0
-                    && self.cars_road_v[i].current_pos
-                        < 0.0 + ROADH_WIDTH + self.cars_road_v[i].length);
-
-            i += 1;
+                || (car.current_pos > 0.0 && car.current_pos < 0.0 + ROADV_WIDTH + car.length)
         }
+
         if crossing_h && crossing_v {
             return Some("===CROSSING COLLISION===");
         }
         None
     }
 
-    pub fn arrive_car(&mut self, road: Road) -> bool {
-        let already_has = match road {
-            Road::RoadH => self.num_created_cars_h,
-            Road::RoadV => self.num_created_cars_v,
-        };
+    fn arrive_speed(&self, road: &Road) -> f64 {
+        match road {
+            Road::RoadH => {
+                if self.cars_road_h.len() == 0 {
+                    return vehicles::CRUISING_SPEED;
+                } else {
+                    let last_car = self.cars_road_h.last().unwrap();
+                    let distance = _ROADH_PERIMETER + last_car.current_pos - last_car.length;
 
-        if already_has == ROAD_MAX_CARS {
+                    if distance < 0.5 {
+                        return 0.0;
+                    } else if distance < 4.0 {
+                        return vehicles::CRUISING_SPEED.min(last_car.current_speed);
+                    } else {
+                        vehicles::CRUISING_SPEED
+                    }
+                }
+            }
+            Road::RoadV => {
+                if self.cars_road_v.len() == 0 {
+                    return vehicles::CRUISING_SPEED;
+                } else {
+                    let last_car = self.cars_road_v.last().unwrap();
+                    let distance = _ROADH_PERIMETER + last_car.current_pos - last_car.length;
+
+                    if distance < 0.5 {
+                        return 0.0;
+                    } else if distance < 4.0 {
+                        return vehicles::CRUISING_SPEED.min(last_car.current_speed);
+                    } else {
+                        vehicles::CRUISING_SPEED
+                    }
+                }
+            }
+        }
+    }
+
+    pub fn arrive_car(&mut self, road: Road) -> bool {
+        let spd = self.arrive_speed(&road);
+        let speed_up: f64;
+
+        if spd == 0.0 {
             return false;
         }
 
-        let mut new_plate = String::from("EEE");
-        new_plate.push_str(&format!("{:04}", already_has));
+        let mut new_plate = String::from("CCC");
+        new_plate.push_str(&format!("{:04}", self.created_cars));
+        self.created_cars += 1;
 
-        let new_car = Car::new(new_plate, road.clone(), vehicles::SPEEDUP_MAX);
+        let new_car = Car::new(new_plate, road.clone(), 0.0);
 
         match road {
             Road::RoadH => {
-                self.cars_road_h[self.num_created_cars_h] = new_car;
-                self.num_created_cars_h += 1;
+                self.cars_road_h.push(new_car);
             }
             Road::RoadV => {
-                self.cars_road_v[self.num_created_cars_v] = new_car;
-                self.num_created_cars_v += 1;
+                self.cars_road_v.push(new_car);
             }
         }
-
         true
     }
 
     pub fn tick(&mut self, tickms: f64) {
         print!("-TRAFFTIC.TICK-");
 
-        let mut i;
-
-        i = self.num_leave_cars_h;
-        while i < self.num_created_cars_h {
-            self.cars_road_h[i].tick(tickms);
-            i += 1;
+        for car in &mut self.cars_road_h {
+            car.tick(tickms);
         }
 
-        i = self.num_leave_cars_v;
-        while i < self.num_created_cars_v {
-            self.cars_road_v[i].tick(tickms);
-            i += 1;
+        for car in &mut self.cars_road_v {
+            car.tick(tickms);
         }
 
-        if self.num_leave_cars_h < self.num_created_cars_h {
-            let older_h = &self.cars_road_h[self.num_leave_cars_h];
-            if older_h.current_pos > older_h.length + ROADV_WIDTH + _ROADH_MARGIN {
-                println!("=== @{} LEAVE THE ROAD H===", older_h.plate);
-                self.num_leave_cars_h += 1;
+        if self.cars_road_h.len() > 0 {
+            let older_h = &self.cars_road_h.get(0).unwrap();
+            if older_h.current_pos > 0.0 + older_h.length + ROADV_WIDTH {
+                println!("@{} leave the road H", older_h.plate);
+                self.cars_road_h.remove(0);
             }
         }
 
-        if self.num_leave_cars_v < self.num_created_cars_v {
-            let older_v = &self.cars_road_v[self.num_leave_cars_v];
-            if older_v.current_pos > older_v.length + ROADH_WIDTH + _ROADV_MARGIN {
-                println!("=== @{} LEAVE THE ROAD V===", older_v.plate);
-                self.num_leave_cars_v += 1;
+        if self.cars_road_v.len() > 0 {
+            let older_v = &self.cars_road_v.get(0).unwrap();
+            if older_v.current_pos > 0.0 + older_v.length + ROADH_WIDTH {
+                println!("@{} leave the road V", older_v.plate);
+                self.cars_road_v.remove(0);
             }
         }
     }
@@ -164,23 +167,17 @@ impl Traffic {
     pub fn show_roads(&self) {
         println!("-----CARS ON ROAD H-----");
 
-        let mut i = self.num_leave_cars_h;
-        while i < self.num_created_cars_h {
-            self.cars_road_h[i].show();
-            i += 1;
+        for car in &self.cars_road_h {
+            car.show();
         }
 
         println!("-----CARS ON ROAD V-----");
-
-        let mut i = self.num_leave_cars_v;
-        while i < self.num_created_cars_v {
-            self.cars_road_v[i].show();
-            i += 1;
+        for car in &self.cars_road_v {
+            car.show();
         }
     }
 
     pub fn empty(&self) -> bool {
-        self.num_created_cars_h == self.num_leave_cars_h
-            && self.num_created_cars_v == self.num_leave_cars_v
+        self.cars_road_h.len() == 0 && self.cars_road_v.len() == 0
     }
 }
